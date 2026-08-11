@@ -45,7 +45,7 @@ jobs:
      #automatic modification of the tag on manifest file
 
       - name: update Image Tag in Deployment YAML
-          run: |
+        run: |
             sed -i 's|image: evanslmntri/mon-app:.*|image: evanslmntrix/mon-app:${{ github.sha }}|g' deployment.yaml
 
     # pushing changes on gitops repos
