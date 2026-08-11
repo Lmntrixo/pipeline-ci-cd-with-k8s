@@ -19,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+    #dockerhub login
+
       - name: Login Docker Hub
         uses: docker/login-action@v3
         with:
@@ -34,9 +36,25 @@ jobs:
     needs: build-and-push
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout du gitops repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'Lmntrixo/gitops-argocd'
+          token: ${{ secrets.GITOPS_GITHUB_TOKEN }}
 
-      - name: deployer sur kubernetes( kind)
-        run: kubectl set image deployment/mon-app mon-app=evanslmntrix/mon-app:${{ github.sha }}
+     #automatic modification of the tag on manifest file
+
+      - name: update Image Tag in Deployment YAML
+          run: |
+            sed -i 's|image: evanslmntri/mon-app:.*|image: evanslmntrix/mon-app:${{ github.sha }}|g' deployment.yaml
+
+    # pushing changes on gitops repos
+      - name: commit and push on gitops repo
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@://github.com"
+          git add deployment.yaml
+          git commit -m "chore: up image to ${{ github.sha }} [skip ci]" || echo "no changes to commit"
+          git push origin main
 
 

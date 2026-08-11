@@ -1,0 +1,21 @@
+# pipeline-cicd-with-k8s
+
+# CD with kubernetes - Automated Rolling Deployments
+A follow-up to the "CD without kubernetes" Project, demonstrating how the pipeline evolves when 
+kubernetes takes over container orchestration.
+
+## Stack
+- Node.js ( minimal HTTP server app)
+- Docker
+- Kubernetes( kind_
+- github Actions( self-hosted-runner)
+
+## pipeline architecture
+1. ** `test` job** (github-hosted runner): syntax validation of the code
+2. ** `build-and-push` job** (self-hosted runner): builds the Docker image, tags it with the commit SHA, push it on dockerhun
+3. ** `deploy` job** ( self-hosted runner): triggers `kubectl set image` to update the kubernetes deployment with the new image tag
+
+kubernetes then handles the rolling update itsel - replacings pods gradually, with zero downtime
+
+## key differences from the non-kubernetes version
+
