@@ -46,7 +46,7 @@ jobs:
 
       - name: update Image Tag in Deployment YAML
         run: |
-            sed -i 's|image: evanslmntri/mon-app:.*|image: evanslmntrix/mon-app:${{ github.sha }}|g' deployment.yaml
+            sed -i 's|image: evanslmntrix/mon-app:.*|image: evanslmntrix/mon-app:${{ github.sha }}|g' k8s/deployment.yaml
 
     # pushing changes on gitops repos
       - name: commit and push on gitops repo
